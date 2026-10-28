@@ -1,3 +1,8 @@
+//! `uom-ng` is a fork of [uom](https://github.com/iliekturtles/uom), maintained by
+//! [okhsunrog](https://github.com/okhsunrog). The package is named `uom-ng`, and the Rust library
+//! name remains `uom`. Supported integer conversion factors are evaluated at compile time, with
+//! the existing run-time path retained for other conversions.
+//!
 //! Units of measurement is a crate that does automatic type-safe zero-cost
 //! [dimensional analysis][analysis]. You can create your own systems or use the pre-built
 //! [International System of Units][si] (SI) which is based on the
@@ -14,11 +19,11 @@
 //! [orbiter]: https://en.wikipedia.org/wiki/Mars_Climate_Orbiter
 //!
 //! ## Usage
-//! `uom` requires `rustc` 1.68.0 or later. Add this to your `Cargo.toml`:
+//! `uom-ng` requires `rustc` 1.82.0 or later. Add this to your `Cargo.toml`:
 //!
 //! ```toml
 //! [dependencies]
-//! uom = "0.38.0"
+//! uom-ng = "0.39.0"
 //! ```
 //!
 //! and this to your crate root:
@@ -67,22 +72,20 @@
 //! features in Cargo.toml:
 //!
 //! ```toml
-//! [dependencies]
-//! uom = {
-//!     version = "0.38.0",
-//!     default-features = false,
-//!     features = [
-//!         "autoconvert", # automatic base unit conversion.
-//!         "usize", "u8", "u16", "u32", "u64", "u128", # Unsigned integer storage types.
-//!         "isize", "i8", "i16", "i32", "i64", "i128", # Signed integer storage types.
-//!         "bigint", "biguint", # Arbitrary width integer storage types.
-//!         "rational", "rational32", "rational64", "bigrational", # Integer ratio storage types.
-//!         "complex32", "complex64", # Complex floating point storage types.
-//!         "f32", "f64", # Floating point storage types.
-//!         "si", "std", # Built-in SI system and std library support.
-//!         "serde", # Serde support.
-//!     ]
-//! }
+//! [dependencies.uom-ng]
+//! version = "0.39.0"
+//! default-features = false
+//! features = [
+//!     "autoconvert", # automatic base unit conversion.
+//!     "usize", "u8", "u16", "u32", "u64", "u128", # Unsigned integer storage types.
+//!     "isize", "i8", "i16", "i32", "i64", "i128", # Signed integer storage types.
+//!     "bigint", "biguint", # Arbitrary width integer storage types.
+//!     "rational", "rational32", "rational64", "bigrational", # Integer ratio storage types.
+//!     "complex32", "complex64", # Complex floating point storage types.
+//!     "f32", "f64", # Floating point storage types.
+//!     "si", "std", # Built-in SI system and std library support.
+//!     "serde", # Serde support.
+//! ]
 //! ```
 //!
 //!  * `autoconvert` -- Feature to enable automatic conversion between base units in binary
@@ -609,8 +612,10 @@ storage_types! {
             let negative = numer < 0;
             let magnitude = numer.unsigned_abs();
 
+            let max = <Self as crate::ConversionFactor<V>>::MAX_MAGNITUDE;
+
             // Negative factors can not be represented by unsigned storage types.
-            if (negative && V::MIN == 0) || magnitude > Self::MAX_MAGNITUDE || denom > Self::MAX_MAGNITUDE {
+            if (negative && V::MIN == 0) || magnitude > max || denom > max {
                 return None;
             }
 

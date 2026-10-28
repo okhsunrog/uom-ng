@@ -1,18 +1,11 @@
 uom-macros
 ===
-[![Travis](https://travis-ci.org/iliekturtles/uom.svg?branch=master)](https://travis-ci.org/iliekturtles/uom)
-[![Coveralls](https://coveralls.io/repos/github/iliekturtles/uom/badge.svg?branch=master)](https://coveralls.io/github/iliekturtles/uom?branch=master)
-[![Rustup.rs](https://img.shields.io/badge/rustc-1.68.0%2B-orange.svg)](https://rustup.rs/)
-[![Crates.io](https://img.shields.io/crates/v/uom-macros.svg)](https://crates.io/crates/uom-macros)
-[![Crates.io](https://img.shields.io/crates/l/uom-macros.svg)](https://crates.io/crates/uom-macros)
-[![Documentation](https://img.shields.io/badge/documentation-docs.rs-blue.svg)](https://docs.rs/uom-macros)
+This unpublished workspace crate is a placeholder inherited from
+[uom](https://github.com/iliekturtles/uom). Its `system!` and `quantity!` procedural macros
+currently return their input unchanged. The `uom-ng` library defines its macros independently
+and does not depend on this crate.
 
-⚠ This crate is currently a placeholder for future development efforts. ⚠
-
-`uom-macros` provides procedural macro support for `uom`. Two function-style macros are available.
-`system!`, to define a system of quantities and a related system of units, and `quantity!`, to
-define quantities within a system.  See the [`uom`](https://crates.io/crates/uom) crate for full
-details.
+See the [uom-ng README](../README.md) for the supported library and installation instructions.
 
 ## Contributing
 Contributions are welcome from everyone. Submit a pull request, an issue, or just add comments to an

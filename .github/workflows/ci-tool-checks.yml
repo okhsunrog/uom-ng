@@ -61,8 +61,10 @@ jobs:
         if: ${{ success() && github.event_name == 'push' }}
         run: cargo +nightly tarpaulin --verbose --timeout 120 --out Xml
 
-      - name: Upload to codecov.io
-        uses: codecov/codecov-action@v1.0.2
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v7.0.2
         if: ${{ success() && github.event_name == 'push' }}
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          name: coverage
+          path: cobertura.xml
+          if-no-files-found: error

@@ -1,6 +1,6 @@
 //! Example showing how to use the `unit!` macro to add new units to existing quantities.
 //!
-//! [Pull requests](https://github.com/iliekturtles/uom/pulls) for new units are always greatly
+//! [Pull requests](https://github.com/okhsunrog/uom-ng/pulls) for new units are always greatly
 //! appreciated.
 
 #[macro_use]

@@ -2,9 +2,10 @@
 name = "feature_check"
 version = "0.1.0"
 edition = "2021"
+publish = false
 
 [dependencies]
-uom = { path = "../.." }
+uom = { package = "uom-ng", path = "../.." }
 
 [features]
 default = []

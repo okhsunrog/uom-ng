@@ -2,9 +2,10 @@
 name = "edition_check"
 version = "0.1.0"
 edition = "2015"
+publish = false
 
 [dependencies]
-uom = { path = "../.." }
+uom = { package = "uom-ng", path = "../.." }
 
 [features]
 default = []

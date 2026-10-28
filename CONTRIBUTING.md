@@ -1,5 +1,9 @@
 Contributing
 ===
+This repository maintains the `uom-ng` fork. Open issues and pull requests at
+[okhsunrog/uom-ng](https://github.com/okhsunrog/uom-ng). The upstream history and its contributors
+are preserved in Git and in [CHANGELOG.md](CHANGELOG.md).
+
 Contributions are welcome from everyone. You must understand your code and be able to explain
 what your changes do. Submit a pull request, an issue, or just add comments to an existing item.
 Low-effort submissions will be closed and future submissions may be blocked.

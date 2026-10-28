@@ -3,11 +3,11 @@ name = "uom-macros"
 version = "0.0.0"
 edition = "2021"
 rust-version = "1.68.0"
+publish = false
 authors = ["Mike Boutin <mike.boutin@gmail.com>"]
-description = "Units of measurement -- procedural macros"
-documentation = "https://docs.rs/uom-macros"
+description = "Internal procedural macro placeholder for uom-ng"
 #homepage = ""
-repository = "https://github.com/iliekturtles/uom"
+repository = "https://github.com/okhsunrog/uom-ng"
 readme = "README.md"
 license = "Apache-2.0 OR MIT"
 

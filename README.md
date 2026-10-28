@@ -1,11 +1,21 @@
-uom
-===
-[![Github Actions](https://img.shields.io/github/actions/workflow/status/iliekturtles/uom/ci-full-test-suite.yml?branch=master)](https://github.com/iliekturtles/uom/actions)
-[![Codecov.io](https://img.shields.io/codecov/c/github/iliekturtles/uom/master)](https://codecov.io/gh/iliekturtles/uom)
+uom-ng
+======
+[![Github Actions](https://img.shields.io/github/actions/workflow/status/okhsunrog/uom-ng/ci-full-test-suite.yml?branch=main)](https://github.com/okhsunrog/uom-ng/actions)
 [![Rustup.rs](https://img.shields.io/badge/rustc-1.82.0%2B-orange.svg)](https://rustup.rs/)
-[![Crates.io](https://img.shields.io/crates/v/uom.svg)](https://crates.io/crates/uom)
-[![Crates.io](https://img.shields.io/crates/l/uom.svg)](https://crates.io/crates/uom)
-[![Documentation](https://img.shields.io/badge/documentation-docs.rs-blue.svg)](https://docs.rs/uom)
+[![Crates.io](https://img.shields.io/crates/v/uom-ng.svg)](https://crates.io/crates/uom-ng)
+[![Crates.io](https://img.shields.io/crates/l/uom-ng.svg)](https://crates.io/crates/uom-ng)
+[![Documentation](https://img.shields.io/badge/documentation-docs.rs-blue.svg)](https://docs.rs/uom-ng)
+
+`uom-ng` is a fork of [uom](https://github.com/iliekturtles/uom), maintained by
+[okhsunrog](https://github.com/okhsunrog). It builds on the work of Mike Boutin and the upstream
+contributors and retains the original Apache-2.0 / MIT licensing.
+
+This fork evaluates supported integer conversion factors at compile time, avoiding run-time
+floating-point and rational conversion code when the factor can be precomputed. Conversions that
+cannot use this path retain the existing run-time implementation. The change was proposed upstream
+in [uom#568](https://github.com/iliekturtles/uom/pull/568).
+
+The package name on crates.io is `uom-ng`; the Rust library name remains `uom`.
 
 Units of measurement is a crate that does automatic type-safe zero-cost
 [dimensional analysis][analysis]. You can create your own systems or use the pre-built
@@ -23,11 +33,11 @@ Units of measurement is a crate that does automatic type-safe zero-cost
 [orbiter]: https://en.wikipedia.org/wiki/Mars_Climate_Orbiter
 
 ## Usage
-`uom` requires `rustc` 1.82.0 or later. Add this to your `Cargo.toml`:
+`uom-ng` requires `rustc` 1.82.0 or later. Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-uom = "0.38.0"
+uom-ng = "0.39.0"
 ```
 
 and this to your crate root:
@@ -35,6 +45,10 @@ and this to your crate root:
 ```rust
 extern crate uom;
 ```
+
+To migrate from upstream `uom`, replace the dependency with `uom-ng` and keep your `uom::` imports.
+The two packages define distinct Rust types, so libraries that exchange quantities must use the
+same package.
 
 The simple example below shows how to use quantities and units as well as how `uom` stops invalid
 operations:
@@ -80,22 +94,20 @@ enabled by default. Features can be cherry-picked by using the `--no-default-fea
 `--features "..."` flags when compiling `uom` or specifying features in Cargo.toml:
 
 ```toml
-[dependencies]
-uom = {
-    version = "0.38.0",
-    default-features = false,
-    features = [
-        "autoconvert", # automatic base unit conversion.
-        "usize", "u8", "u16", "u32", "u64", "u128", # Unsigned integer storage types.
-        "isize", "i8", "i16", "i32", "i64", "i128", # Signed integer storage types.
-        "bigint", "biguint", # Arbitrary width integer storage types.
-        "rational", "rational32", "rational64", "bigrational", # Integer ratio storage types.
-        "complex32", "complex64", # Complex floating point storage types.
-        "f32", "f64", # Floating point storage types.
-        "si", "std", # Built-in SI system and std library support.
-        "serde", # Serde support.
-    ]
-}
+[dependencies.uom-ng]
+version = "0.39.0"
+default-features = false
+features = [
+    "autoconvert", # automatic base unit conversion.
+    "usize", "u8", "u16", "u32", "u64", "u128", # Unsigned integer storage types.
+    "isize", "i8", "i16", "i32", "i64", "i128", # Signed integer storage types.
+    "bigint", "biguint", # Arbitrary width integer storage types.
+    "rational", "rational32", "rational64", "bigrational", # Integer ratio storage types.
+    "complex32", "complex64", # Complex floating point storage types.
+    "f32", "f64", # Floating point storage types.
+    "si", "std", # Built-in SI system and std library support.
+    "serde", # Serde support.
+]
 ```
 
  * `autoconvert` -- Feature to enable automatic conversion between base units in binary operators.

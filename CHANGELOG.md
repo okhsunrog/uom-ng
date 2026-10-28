@@ -9,6 +9,32 @@
 ### Removed
 ### Fixed
 -->
+## [Unreleased] — uom-ng 0.39.0
+First release of the `uom-ng` fork, maintained by [okhsunrog](https://github.com/okhsunrog),
+based on upstream `uom` 0.38.0 and subsequent changes. Earlier entries below describe upstream
+releases.
+
+### Added
+ * Evaluate supported integer conversion factors at compile time, as proposed in
+   [uom#568](https://github.com/iliekturtles/uom/pull/568). Retain the run-time path for unsupported
+   factors and storage types.
+ * Add the `GyromagneticRatio` quantity from upstream
+   [uom#543](https://github.com/iliekturtles/uom/pull/543).
+
+### Changed
+ * Publish under the package name `uom-ng`, retaining the Rust library name `uom`.
+ * Increase the MSRV to Rust 1.82.0 for floating-point arithmetic in `const fn` and inline `const`
+   blocks.
+ * Add defaulted associated constants to `Conversion` and defaulted items to `ConversionFactor`.
+ * Disable publication of the workspace test crates and the procedural macro placeholder.
+ * Store coverage reports as GitHub Actions artifacts.
+
+### Removed
+ * Remove the deprecated `use_serde` feature inherited from upstream development. Use `serde`.
+
+### Fixed
+ * Disambiguate integer conversion bounds when complex storage features are also enabled.
+
 ## [v0.38.0] — 2026-02-13
 This release adds new quantities, new units, compile time improvements, resolves regressions
 introduced in v0.37.0, and bumps the MSRV (minimum supported Rust version) to 1.68.0.
@@ -878,7 +904,7 @@ for the creation of custom systems or the use of the pre-built SI. Basic mathema
 are implemented and a minimal set of quantities (length, mass, time...) and units (meter, kilometer,
 foot, mile, ...) are included.
 
-[Unreleased]: https://github.com/iliekturtles/uom/compare/v0.38.0...master
+[Unreleased]: https://github.com/okhsunrog/uom-ng/compare/v0.38.0...main
 [v0.38.0]: https://github.com/iliekturtles/uom/compare/v0.37.0...v0.38.0
 [v0.37.0]: https://github.com/iliekturtles/uom/compare/v0.36.0...v0.37.0
 [v0.36.0]: https://github.com/iliekturtles/uom/compare/v0.35.0...v0.36.0

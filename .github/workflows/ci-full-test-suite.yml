@@ -46,3 +46,6 @@ jobs:
 
       - name: Test all non-si features
         run: cargo test --verbose --no-run --no-default-features --features "autoconvert usize u8 u16 u32 u64 u128 isize i8 i16 i32 i64 i128 bigint biguint rational rational32 rational64 bigrational complex32 complex64 f32 f64 std serde"
+
+      - name: Check package
+        run: cargo package --locked --package uom-ng

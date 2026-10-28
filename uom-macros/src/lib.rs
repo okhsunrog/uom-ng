@@ -1,9 +1,8 @@
-//! ⚠ This crate is currently a placeholder for future development efforts. ⚠
+//! Unpublished procedural macro placeholder inherited from upstream `uom`.
 //!
-//! `uom-macros` provides procedural macro support for `uom`. Two function-style macros are
-//! available. `system!`, to define a system of quantities and a related system of units, and
-//! `quantity!`, to define quantities within a system.  See the
-//! [`uom`](https://crates.io/crates/uom) crate for full details.
+//! The `system!` and `quantity!` macros currently return their input unchanged. The
+//! [`uom-ng`](https://docs.rs/uom-ng) library defines its macros independently and does not depend
+//! on this crate.
 
 // Rustc lints.
 #![forbid(unsafe_code)]
