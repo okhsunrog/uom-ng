@@ -9,7 +9,7 @@
 ### Removed
 ### Fixed
 -->
-## [Unreleased] — uom-ng 0.39.0
+## [v0.39.0] — 2026-10-29
 First release of the `uom-ng` fork, maintained by [okhsunrog](https://github.com/okhsunrog),
 based on upstream `uom` 0.38.0 and subsequent changes. Earlier entries below describe upstream
 releases.
@@ -904,7 +904,7 @@ for the creation of custom systems or the use of the pre-built SI. Basic mathema
 are implemented and a minimal set of quantities (length, mass, time...) and units (meter, kilometer,
 foot, mile, ...) are included.
 
-[Unreleased]: https://github.com/okhsunrog/uom-ng/compare/v0.38.0...main
+[v0.39.0]: https://github.com/okhsunrog/uom-ng/compare/v0.38.0...v0.39.0
 [v0.38.0]: https://github.com/iliekturtles/uom/compare/v0.37.0...v0.38.0
 [v0.37.0]: https://github.com/iliekturtles/uom/compare/v0.36.0...v0.37.0
 [v0.36.0]: https://github.com/iliekturtles/uom/compare/v0.35.0...v0.36.0
