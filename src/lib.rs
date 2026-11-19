@@ -85,6 +85,8 @@
 //!     "f32", "f64", # Floating point storage types.
 //!     "si", "std", # Built-in SI system and std library support.
 //!     "serde", # Serde support.
+//!     "postcard-schema", # postcard-schema support.
+//!     "defmt", # defmt support.
 //! ]
 //! ```
 //!
@@ -103,6 +105,11 @@
 //!    `uom` with `no_std`. Enabled by default.
 //!  * `serde` -- Feature to enable support for serialization and deserialization of quantities with
 //!    the [Serde][serde] crate. Disabled by default.
+//!  * `postcard-schema` -- Feature to implement `postcard_schema::Schema` for quantities. A
+//!    quantity has the schema of its stored value, matching the `serde` encoding. Disabled by
+//!    default.
+//!  * `defmt` -- Feature to implement `defmt::Format` for quantities. The stored value is
+//!    formatted, in base units. Disabled by default.
 //!
 //! [si]: https://jcgm.bipm.org/vim/en/1.16.html
 //! [serde]: https://serde.rs/
@@ -213,6 +220,14 @@ pub extern crate num_complex;
 #[doc(hidden)]
 #[cfg(feature = "serde")]
 pub extern crate serde_core as serde;
+
+#[doc(hidden)]
+#[cfg(feature = "postcard-schema")]
+pub extern crate postcard_schema;
+
+#[doc(hidden)]
+#[cfg(feature = "defmt")]
+pub extern crate defmt;
 
 #[doc(hidden)]
 pub extern crate typenum;

@@ -9,6 +9,21 @@
 ### Removed
 ### Fixed
 -->
+## [Unreleased]
+
+### Added
+ * `Quantity::sqrt_with`, a dimension-checked square root that takes the root function from the
+   caller. It is available without `std`, for `no_std` targets that avoid `libm`.
+ * The `postcard-schema` feature implements `postcard_schema::Schema` for quantities with the
+   schema of the stored value, matching the `serde` encoding.
+ * The `defmt` feature implements `defmt::Format` for quantities, formatting the stored value in
+   base units.
+
+### Fixed
+ * Compute the reciprocal conversion factor of `get` at compile time. With floating-point
+   storage, the run-time `Fraction::recip` call remained in optimized code although its result
+   was unused.
+
 ## [v0.39.0] — 2026-10-29
 First release of the `uom-ng` fork, maintained by [okhsunrog](https://github.com/okhsunrog),
 based on upstream `uom` 0.38.0 and subsequent changes. Earlier entries below describe upstream

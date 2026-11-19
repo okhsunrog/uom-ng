@@ -89,6 +89,39 @@ macro_rules! serde {
     ($($tt:tt)*) => {};
 }
 
+/// Expands the given block of code when `uom` is compiled with the `defmt` feature.
+#[doc(hidden)]
+#[macro_export]
+#[cfg(feature = "defmt")]
+macro_rules! defmt {
+    ($($tt:tt)*) => { $($tt)* };
+}
+
+/// Does not expand the given block of code when `uom` is compiled without the `defmt` feature.
+#[doc(hidden)]
+#[macro_export]
+#[cfg(not(feature = "defmt"))]
+macro_rules! defmt {
+    ($($tt:tt)*) => {};
+}
+
+/// Expands the given block of code when `uom` is compiled with the `postcard-schema` feature.
+#[doc(hidden)]
+#[macro_export]
+#[cfg(feature = "postcard-schema")]
+macro_rules! postcard_schema {
+    ($($tt:tt)*) => { $($tt)* };
+}
+
+/// Does not expand the given block of code when `uom` is compiled without the `postcard-schema`
+/// feature.
+#[doc(hidden)]
+#[macro_export]
+#[cfg(not(feature = "postcard-schema"))]
+macro_rules! postcard_schema {
+    ($($tt:tt)*) => {};
+}
+
 /// Expands the given block of code when `uom` is compiled with the `si` feature.
 #[doc(hidden)]
 #[macro_export]

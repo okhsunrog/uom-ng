@@ -264,6 +264,8 @@ mod a_struct {
 }
 
 mod asserts;
+#[cfg(all(feature = "postcard-schema", feature = "si", feature = "f32"))]
+mod postcard_schema;
 mod quantities;
 mod quantity;
 mod system;

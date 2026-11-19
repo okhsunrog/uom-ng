@@ -419,11 +419,17 @@ macro_rules! system {
             use $crate::typenum::Integer;
             use $crate::{Conversion, ConversionFactor};
 
-            if let Some(factor) = const { conversion_factor::<D, U, V, N>() } {
-                if let Some(factor) = factor.recip() {
-                    if let Some(v) = V::T::scale(v, factor.numer, factor.denom) {
-                        return v;
-                    }
+            // Take the reciprocal inside the constant block as well. A run-time `recip()` call
+            // is not removed by the optimizer when `scale` declines the factor (floating-point
+            // storage), and would remain in every `get::<N>()` as a dead `i128` call.
+            if let Some(factor) = const {
+                match conversion_factor::<D, U, V, N>() {
+                    Some(factor) => factor.recip(),
+                    None => None,
+                }
+            } {
+                if let Some(v) = V::T::scale(v, factor.numer, factor.denom) {
+                    return v;
                 }
             }
 
@@ -782,6 +788,50 @@ macro_rules! system {
                     dimension: $crate::lib::marker::PhantomData,
                     units: $crate::lib::marker::PhantomData,
                     value: self.value.abs(),
+                }
+            }
+
+            /// Takes the square root with a caller-provided root function, keeping the
+            /// dimensional result of [`sqrt`](Self::sqrt).
+            ///
+            /// Available without `std`: `no_std` targets often avoid `libm` and supply their own
+            /// root (for example a hardware `VSQRT` wrapper). `root` receives the value in base
+            /// units.
+            ///
+            #[doc = doc_example!()]
+            /// # use uom::si::f32::*;
+            /// # use uom::si::area::square_meter;
+            /// # use uom::si::length::meter;
+            /// let l: Length = Area::new::<square_meter>(4.0).sqrt_with(|v| if v == 4.0 { 2.0 } else { f32::NAN });
+            /// assert_eq!(l.get::<meter>(), 2.0);
+            /// ```
+            ///
+            /// The input type must have dimensions divisible by two:
+            ///
+            #[doc = doc_example!("compile_fail")]
+            /// # use uom::si::f32::*;
+            /// # use uom::si::length::meter;
+            /// // error[E0271]: type mismatch resolving ...
+            /// let r = Length::new::<meter>(4.0).sqrt_with(|v| v);
+            /// ```
+            #[must_use = "method returns a new number and does not mutate the original value"]
+            #[inline(always)]
+            pub fn sqrt_with<F>(
+                self,
+                root: F,
+            ) -> Quantity<
+                $quantities<$($crate::typenum::PartialQuot<D::$symbol, $crate::typenum::P2>),+>,
+                U, V>
+            where
+                F: FnOnce(V) -> V,
+                $(D::$symbol: $crate::typenum::PartialDiv<$crate::typenum::P2>,
+                <D::$symbol as $crate::typenum::PartialDiv<$crate::typenum::P2>>::Output: $crate::typenum::Integer,)+
+                D::Kind: $crate::marker::Div,
+            {
+                Quantity {
+                    dimension: $crate::lib::marker::PhantomData,
+                    units: $crate::lib::marker::PhantomData,
+                    value: root(self.value),
                 }
             }
 
@@ -1464,6 +1514,31 @@ macro_rules! system {
                 value: V::ZERO,
             };
         }
+
+        defmt! {
+        /// Formats the stored value, which is in base units, like the `serde` encoding.
+        impl<D, U, V> $crate::defmt::Format for Quantity<D, U, V>
+        where
+            D: Dimension + ?Sized,
+            U: Units<V> + ?Sized,
+            V: $crate::num::Num + $crate::Conversion<V> + $crate::defmt::Format,
+        {
+            fn format(&self, f: $crate::defmt::Formatter<'_>) {
+                $crate::defmt::Format::format(&self.value, f)
+            }
+        }}
+
+        postcard_schema! {
+        /// A quantity has the schema of its stored value: serialization writes only `value`, so
+        /// schema-derived keys and wire bytes are those of the underlying `V`.
+        impl<D, U, V> $crate::postcard_schema::Schema for Quantity<D, U, V>
+        where
+            D: Dimension + ?Sized,
+            U: Units<V> + ?Sized,
+            V: $crate::num::Num + $crate::Conversion<V> + $crate::postcard_schema::Schema,
+        {
+            const SCHEMA: &'static $crate::postcard_schema::schema::NamedType = V::SCHEMA;
+        }}
 
         serde! {
         impl<D, U, V> $crate::serde::Serialize for Quantity<D, U, V>
