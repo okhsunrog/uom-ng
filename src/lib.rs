@@ -542,6 +542,156 @@ pub trait ConstZero {
     const ZERO: Self;
 }
 
+/// Kind of a product or quotient of two quantities.
+///
+/// Each kind belongs to a class. Products of plain and angle kinds keep the
+/// historical behavior and have the default [`Kind`]. An electrical angle
+/// kind (with the `si` feature) propagates through multiplication and
+/// division by plain quantities, so `ω_e·dt` is an electrical angle, and
+/// cannot be combined with a mechanical angle kind at all.
+#[doc(hidden)]
+pub mod kind_class {
+    /// Plain kinds: the default `Kind` and kinds without angle semantics.
+    #[derive(Clone, Copy, Debug)]
+    pub enum Plain {}
+    /// Mechanical angle kinds (`AngleKind`, `SolidAngleKind`).
+    #[derive(Clone, Copy, Debug)]
+    pub enum Mechanical {}
+    /// Electrical angle kind of rotating machines.
+    #[derive(Clone, Copy, Debug)]
+    pub enum Electrical {}
+
+    /// Class of a kind; implemented for every kind that takes part in `*` or `/`.
+    pub trait KindClass {
+        type Class;
+    }
+
+    /// Kind of the product or quotient of two classes with result dimension `D`
+    /// (a tuple of the system's base-dimension exponents). Missing pairs do
+    /// not compile.
+    pub trait Product<R, D> {
+        type Kind: ?Sized;
+    }
+
+    impl KindClass for dyn crate::Kind {
+        type Class = Plain;
+    }
+
+    impl<D> Product<Plain, D> for Plain {
+        type Kind = dyn crate::Kind;
+    }
+    impl<D> Product<Mechanical, D> for Plain {
+        type Kind = dyn crate::Kind;
+    }
+    impl<D> Product<Plain, D> for Mechanical {
+        type Kind = dyn crate::Kind;
+    }
+    impl<D> Product<Mechanical, D> for Mechanical {
+        type Kind = dyn crate::Kind;
+    }
+
+    /// Electrical times plain stays electrical while the result is angular (an
+    /// angle or its time derivatives); anything else (for example `ω_e·λ`, a
+    /// voltage) has the default kind.
+    #[cfg(feature = "si")]
+    impl<D: ElectricalResult> Product<Plain, D> for Electrical {
+        type Kind = D::Kind;
+    }
+    #[cfg(feature = "si")]
+    impl<D: ElectricalResult> Product<Electrical, D> for Plain {
+        type Kind = D::Kind;
+    }
+    #[cfg(feature = "si")]
+    impl<D> Product<Electrical, D> for Electrical {
+        type Kind = dyn crate::Kind;
+    }
+    // No Electrical x Mechanical: mixing electrical and mechanical angles is
+    // a pole-pairs bug.
+
+    /// Kind of an electrical-by-plain result with SI dimension exponents
+    /// `(L, M, T, I, Th, N, J)`: electrical when only `T` is nonzero.
+    #[cfg(feature = "si")]
+    pub trait ElectricalResult {
+        type Kind: ?Sized;
+    }
+
+    #[cfg(feature = "si")]
+    impl<L, M, T, I, Th, N, J> ElectricalResult for (L, M, T, I, Th, N, J)
+    where
+        L: typenum::IsEqual<typenum::Z0>,
+        M: typenum::IsEqual<typenum::Z0>,
+        I: typenum::IsEqual<typenum::Z0>,
+        Th: typenum::IsEqual<typenum::Z0>,
+        N: typenum::IsEqual<typenum::Z0>,
+        J: typenum::IsEqual<typenum::Z0>,
+        typenum::Eq<L, typenum::Z0>: crate::lib::ops::BitAnd<typenum::Eq<M, typenum::Z0>>,
+        typenum::And<typenum::Eq<L, typenum::Z0>, typenum::Eq<M, typenum::Z0>>:
+            crate::lib::ops::BitAnd<typenum::Eq<I, typenum::Z0>>,
+        typenum::And<
+            typenum::And<typenum::Eq<L, typenum::Z0>, typenum::Eq<M, typenum::Z0>>,
+            typenum::Eq<I, typenum::Z0>,
+        >: crate::lib::ops::BitAnd<typenum::Eq<Th, typenum::Z0>>,
+        typenum::And<
+            typenum::And<
+                typenum::And<typenum::Eq<L, typenum::Z0>, typenum::Eq<M, typenum::Z0>>,
+                typenum::Eq<I, typenum::Z0>,
+            >,
+            typenum::Eq<Th, typenum::Z0>,
+        >: crate::lib::ops::BitAnd<typenum::Eq<N, typenum::Z0>>,
+        typenum::And<
+            typenum::And<
+                typenum::And<
+                    typenum::And<typenum::Eq<L, typenum::Z0>, typenum::Eq<M, typenum::Z0>>,
+                    typenum::Eq<I, typenum::Z0>,
+                >,
+                typenum::Eq<Th, typenum::Z0>,
+            >,
+            typenum::Eq<N, typenum::Z0>,
+        >: crate::lib::ops::BitAnd<typenum::Eq<J, typenum::Z0>>,
+        typenum::And<
+            typenum::And<
+                typenum::And<
+                    typenum::And<
+                        typenum::And<typenum::Eq<L, typenum::Z0>, typenum::Eq<M, typenum::Z0>>,
+                        typenum::Eq<I, typenum::Z0>,
+                    >,
+                    typenum::Eq<Th, typenum::Z0>,
+                >,
+                typenum::Eq<N, typenum::Z0>,
+            >,
+            typenum::Eq<J, typenum::Z0>,
+        >: ElectricalIf,
+    {
+        type Kind = <typenum::And<
+            typenum::And<
+                typenum::And<
+                    typenum::And<
+                        typenum::And<typenum::Eq<L, typenum::Z0>, typenum::Eq<M, typenum::Z0>>,
+                        typenum::Eq<I, typenum::Z0>,
+                    >,
+                    typenum::Eq<Th, typenum::Z0>,
+                >,
+                typenum::Eq<N, typenum::Z0>,
+            >,
+            typenum::Eq<J, typenum::Z0>,
+        > as ElectricalIf>::Kind;
+    }
+
+    /// Selects the electrical kind for `B1` and the default kind for `B0`.
+    #[cfg(feature = "si")]
+    pub trait ElectricalIf {
+        type Kind: ?Sized;
+    }
+    #[cfg(feature = "si")]
+    impl ElectricalIf for typenum::B1 {
+        type Kind = dyn crate::si::marker::ElectricalAngleKind;
+    }
+    #[cfg(feature = "si")]
+    impl ElectricalIf for typenum::B0 {
+        type Kind = dyn crate::Kind;
+    }
+}
+
 /// Default [kind][kind] of quantities to allow addition, subtraction, multiplication, division,
 /// remainder, negation, and saturating addition/subtraction.
 ///

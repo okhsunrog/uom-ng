@@ -608,12 +608,21 @@ macro_rules! system {
                     Dl::Kind: $crate::marker::$MulDivTrait,
                     Dr: Dimension + ?Sized,
                     Dr::Kind: $crate::marker::$MulDivTrait,
+                    Dl::Kind: $crate::kind_class::KindClass,
+                    Dr::Kind: $crate::kind_class::KindClass,
+                    <Dl::Kind as $crate::kind_class::KindClass>::Class:
+                        $crate::kind_class::Product<<Dr::Kind as $crate::kind_class::KindClass>::Class,
+                            ($($crate::typenum::$AddSubAlias<Dl::$symbol, Dr::$symbol>,)+)>,
                     Ul: Units<V> + ?Sized,
                     Ur: Units<V> + ?Sized,
                     V: $crate::num::Num + $crate::Conversion<V> + $crate::lib::ops::$MulDivTrait<V>,
                 {
                     type Output = Quantity<
-                        $quantities<$($crate::typenum::$AddSubAlias<Dl::$symbol, Dr::$symbol>,)+>,
+                        $quantities<$($crate::typenum::$AddSubAlias<Dl::$symbol, Dr::$symbol>,)+
+                            <<Dl::Kind as $crate::kind_class::KindClass>::Class as
+                                $crate::kind_class::Product<
+                                    <Dr::Kind as $crate::kind_class::KindClass>::Class,
+                                    ($($crate::typenum::$AddSubAlias<Dl::$symbol, Dr::$symbol>,)+)>>::Kind>,
                         Ul, V>;
 
                     #[inline(always)]
@@ -636,11 +645,20 @@ macro_rules! system {
                     Dl::Kind: $crate::marker::$MulDivTrait,
                     Dr: Dimension + ?Sized,
                     Dr::Kind: $crate::marker::$MulDivTrait,
+                    Dl::Kind: $crate::kind_class::KindClass,
+                    Dr::Kind: $crate::kind_class::KindClass,
+                    <Dl::Kind as $crate::kind_class::KindClass>::Class:
+                        $crate::kind_class::Product<<Dr::Kind as $crate::kind_class::KindClass>::Class,
+                            ($($crate::typenum::$AddSubAlias<Dl::$symbol, Dr::$symbol>,)+)>,
                     U: Units<V> + ?Sized,
                     V: $crate::num::Num + $crate::Conversion<V> + $crate::lib::ops::$MulDivTrait<V>,
                 {
                     type Output = Quantity<
-                        $quantities<$($crate::typenum::$AddSubAlias<Dl::$symbol, Dr::$symbol>,)+>,
+                        $quantities<$($crate::typenum::$AddSubAlias<Dl::$symbol, Dr::$symbol>,)+
+                            <<Dl::Kind as $crate::kind_class::KindClass>::Class as
+                                $crate::kind_class::Product<
+                                    <Dr::Kind as $crate::kind_class::KindClass>::Class,
+                                    ($($crate::typenum::$AddSubAlias<Dl::$symbol, Dr::$symbol>,)+)>>::Kind>,
                         U, V>;
 
                     #[inline(always)]

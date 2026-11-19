@@ -15,6 +15,16 @@
  * `ElectricalAngle`, `ElectricalAngularVelocity` and `ElectricalAngularAcceleration` quantities
    of the new `ElectricalAngleKind`, for rotating electric machines. Electrical and mechanical
    angular quantities cannot be added, compared or converted into each other.
+ * Kind algebra for products and quotients: the result kind follows from the operand kind classes
+   and the result dimension. An electrical angle quantity times or over a plain quantity stays
+   electrical while the result is angular (`omega_e * dt` is an `ElectricalAngle`) and is plain
+   otherwise (`omega_e * flux` is an `ElectricPotential`). Electrical and mechanical angle kinds
+   do not combine.
+
+### Changed
+ * Kinds that take part in `*` or `/` implement `kind_class::KindClass`. Custom kinds defined
+   outside `uom` must add an implementation (class `Plain` keeps the previous behavior).
+ * `ElectricalAngleKind` does not convert to or from the default `Kind`.
  * `Quantity::sqrt_with`, a dimension-checked square root that takes the root function from the
    caller. It is available without `std`, for `no_std` targets that avoid `libm`.
  * The `postcard-schema` feature implements `postcard_schema::Schema` for quantities with the

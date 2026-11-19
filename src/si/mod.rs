@@ -470,8 +470,34 @@ pub mod marker {
 
     impl_from!(AngleKind, Kind);
     impl_from!(Kind, AngleKind);
-    impl_from!(ElectricalAngleKind, Kind);
-    impl_from!(Kind, ElectricalAngleKind);
+
+    impl crate::kind_class::KindClass for dyn AngleKind {
+        type Class = crate::kind_class::Mechanical;
+    }
+    impl crate::kind_class::KindClass for dyn SolidAngleKind {
+        type Class = crate::kind_class::Mechanical;
+    }
+    impl crate::kind_class::KindClass for dyn ElectricalAngleKind {
+        type Class = crate::kind_class::Electrical;
+    }
+    impl crate::kind_class::KindClass for dyn InformationKind {
+        type Class = crate::kind_class::Plain;
+    }
+    impl crate::kind_class::KindClass for dyn TemperatureKind {
+        type Class = crate::kind_class::Plain;
+    }
+    impl crate::kind_class::KindClass for dyn ConstituentConcentrationKind {
+        type Class = crate::kind_class::Plain;
+    }
+    impl crate::kind_class::KindClass for dyn SurfaceTensionKind {
+        type Class = crate::kind_class::Plain;
+    }
+    impl crate::kind_class::KindClass for dyn KinematicViscosityKind {
+        type Class = crate::kind_class::Plain;
+    }
+    impl crate::kind_class::KindClass for dyn IlluminanceKind {
+        type Class = crate::kind_class::Plain;
+    }
     impl_from!(SolidAngleKind, Kind);
     impl_from!(Kind, SolidAngleKind);
     impl_from!(InformationKind, Kind);
