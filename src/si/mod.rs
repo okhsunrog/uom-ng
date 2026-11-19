@@ -69,6 +69,9 @@ system! {
         curvature::Curvature,
         diffusion_coefficient::DiffusionCoefficient,
         dynamic_viscosity::DynamicViscosity,
+        electrical_angle::ElectricalAngle,
+        electrical_angular_acceleration::ElectricalAngularAcceleration,
+        electrical_angular_velocity::ElectricalAngularVelocity,
         electric_charge::ElectricCharge,
         electric_charge_areal_density::ElectricChargeArealDensity,
         electric_charge_linear_density::ElectricChargeLinearDensity,
@@ -209,6 +212,40 @@ pub mod marker {
     /// let r: Ratio = a.into();
     /// ```
     pub trait SolidAngleKind: Kind {}
+
+    /// `ElectricalAngleKind` is a `Kind` for the electrical angle of a rotating electric machine
+    /// (the mechanical angle times the number of pole pairs) and its derivatives. Electrical and
+    /// mechanical ([`AngleKind`]) quantities do not mix: there is no conversion between the two
+    /// kinds. Conversions to and from the default `Kind` are supported through `From`.
+    ///
+    #[cfg_attr(feature = "f32", doc = " ```rust")]
+    #[cfg_attr(not(feature = "f32"), doc = " ```rust,ignore")]
+    /// # use uom::si::f32::*;
+    /// # use uom::si::electrical_angular_velocity::radian_per_second;
+    /// # use uom::si::magnetic_flux::weber;
+    /// let w = ElectricalAngularVelocity::new::<radian_per_second>(400.0);
+    /// let emf: ElectricPotential = w * MagneticFlux::new::<weber>(0.003);
+    /// ```
+    ///
+    #[cfg_attr(feature = "f32", doc = " ```compile_fail")]
+    #[cfg_attr(not(feature = "f32"), doc = " ```rust,ignore")]
+    /// # use uom::si::f32::*;
+    /// # use uom::si::angular_velocity as m;
+    /// # use uom::si::electrical_angular_velocity as e;
+    /// // error[E0308]: mismatched types
+    /// let _ = ElectricalAngularVelocity::new::<e::radian_per_second>(1.0)
+    ///     + AngularVelocity::new::<m::radian_per_second>(1.0);
+    /// ```
+    ///
+    #[cfg_attr(feature = "f32", doc = " ```compile_fail")]
+    #[cfg_attr(not(feature = "f32"), doc = " ```rust,ignore")]
+    /// # use uom::si::f32::*;
+    /// # use uom::si::angular_velocity::radian_per_second;
+    /// // error[E0277]: no conversion from a mechanical to an electrical angular velocity
+    /// let _: ElectricalAngularVelocity =
+    ///     AngularVelocity::new::<radian_per_second>(1.0).into();
+    /// ```
+    pub trait ElectricalAngleKind: Kind {}
 
     /// `InformationKind` is a `Kind` for separating information quantities from their identically
     /// dimensioned non-information quantity counterparts. Conversions to and from `InformationKind`
@@ -433,6 +470,8 @@ pub mod marker {
 
     impl_from!(AngleKind, Kind);
     impl_from!(Kind, AngleKind);
+    impl_from!(ElectricalAngleKind, Kind);
+    impl_from!(Kind, ElectricalAngleKind);
     impl_from!(SolidAngleKind, Kind);
     impl_from!(Kind, SolidAngleKind);
     impl_from!(InformationKind, Kind);

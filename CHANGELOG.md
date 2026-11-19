@@ -12,6 +12,9 @@
 ## [Unreleased]
 
 ### Added
+ * `ElectricalAngle`, `ElectricalAngularVelocity` and `ElectricalAngularAcceleration` quantities
+   of the new `ElectricalAngleKind`, for rotating electric machines. Electrical and mechanical
+   angular quantities cannot be added, compared or converted into each other.
  * `Quantity::sqrt_with`, a dimension-checked square root that takes the root function from the
    caller. It is available without `std`, for `no_std` targets that avoid `libm`.
  * The `postcard-schema` feature implements `postcard_schema::Schema` for quantities with the
