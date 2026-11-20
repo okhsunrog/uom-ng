@@ -1544,6 +1544,19 @@ macro_rules! system {
             fn format(&self, f: $crate::defmt::Formatter<'_>) {
                 $crate::defmt::Format::format(&self.value, f)
             }
+
+            // Forward the hidden tag/data pair too: the trait default wraps a
+            // manual `format` in a nested format sequence, which costs extra
+            // writes and wire bytes for every logged quantity.
+            #[inline]
+            fn _format_tag() -> $crate::defmt::Str {
+                V::_format_tag()
+            }
+
+            #[inline]
+            fn _format_data(&self) {
+                self.value._format_data()
+            }
         }}
 
         postcard_schema! {
