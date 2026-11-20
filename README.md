@@ -37,7 +37,7 @@ Units of measurement is a crate that does automatic type-safe zero-cost
 
 ```toml
 [dependencies]
-uom-ng = "0.39.0"
+uom-ng = "0.40.0"
 ```
 
 and this to your crate root:
@@ -95,7 +95,7 @@ enabled by default. Features can be cherry-picked by using the `--no-default-fea
 
 ```toml
 [dependencies.uom-ng]
-version = "0.39.0"
+version = "0.40.0"
 default-features = false
 features = [
     "autoconvert", # automatic base unit conversion.
@@ -107,6 +107,8 @@ features = [
     "f32", "f64", # Floating point storage types.
     "si", "std", # Built-in SI system and std library support.
     "serde", # Serde support.
+    "postcard-schema", # postcard-schema support.
+    "defmt", # defmt support.
 ]
 ```
 
@@ -125,6 +127,10 @@ features = [
    with `no_std`. Enabled by default.
  * `serde` -- Feature to enable support for serialization and deserialization of quantities with the
    [Serde][serde] crate. Disabled by default.
+ * `postcard-schema` -- Feature to implement `postcard_schema::Schema` for quantities. A quantity has
+   the schema of its stored value, matching the `serde` encoding. Disabled by default.
+ * `defmt` -- Feature to implement `defmt::Format` for quantities. The stored value is formatted, in
+   base units. Disabled by default.
 
 [si]: https://jcgm.bipm.org/vim/en/1.16.html
 [serde]: https://serde.rs/

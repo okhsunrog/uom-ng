@@ -23,7 +23,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! uom-ng = "0.39.0"
+//! uom-ng = "0.40.0"
 //! ```
 //!
 //! and this to your crate root:
@@ -73,7 +73,7 @@
 //!
 //! ```toml
 //! [dependencies.uom-ng]
-//! version = "0.39.0"
+//! version = "0.40.0"
 //! default-features = false
 //! features = [
 //!     "autoconvert", # automatic base unit conversion.

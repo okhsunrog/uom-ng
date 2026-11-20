@@ -11,6 +11,8 @@
 -->
 ## [Unreleased]
 
+## [v0.40.0] — 2026-11-20
+
 ### Added
  * `ElectricalAngle`, `ElectricalAngularVelocity` and `ElectricalAngularAcceleration` quantities
    of the new `ElectricalAngleKind`, for rotating electric machines. Electrical and mechanical
@@ -20,17 +22,17 @@
    electrical while the result is angular (`omega_e * dt` is an `ElectricalAngle`) and is plain
    otherwise (`omega_e * flux` is an `ElectricPotential`). Electrical and mechanical angle kinds
    do not combine.
+ * `Quantity::sqrt_with`, a dimension-checked square root that takes the root function from the
+   caller. It is available without `std`, for `no_std` targets that avoid `libm`.
+ * The `postcard-schema` feature implements `postcard_schema::Schema` for quantities with the
+   schema of the stored value, matching the `serde` encoding.
+ * The `defmt` feature implements `defmt::Format` for quantities. A logged quantity encodes
+   exactly like its stored value in base units, with no extra format sequence.
 
 ### Changed
  * Kinds that take part in `*` or `/` implement `kind_class::KindClass`. Custom kinds defined
    outside `uom` must add an implementation (class `Plain` keeps the previous behavior).
  * `ElectricalAngleKind` does not convert to or from the default `Kind`.
- * `Quantity::sqrt_with`, a dimension-checked square root that takes the root function from the
-   caller. It is available without `std`, for `no_std` targets that avoid `libm`.
- * The `postcard-schema` feature implements `postcard_schema::Schema` for quantities with the
-   schema of the stored value, matching the `serde` encoding.
- * The `defmt` feature implements `defmt::Format` for quantities, formatting the stored value in
-   base units.
 
 ### Fixed
  * Compute the reciprocal conversion factor of `get` at compile time. With floating-point
@@ -932,6 +934,7 @@ for the creation of custom systems or the use of the pre-built SI. Basic mathema
 are implemented and a minimal set of quantities (length, mass, time...) and units (meter, kilometer,
 foot, mile, ...) are included.
 
+[v0.40.0]: https://github.com/okhsunrog/uom-ng/compare/v0.39.0...v0.40.0
 [v0.39.0]: https://github.com/okhsunrog/uom-ng/compare/v0.38.0...v0.39.0
 [v0.38.0]: https://github.com/iliekturtles/uom/compare/v0.37.0...v0.38.0
 [v0.37.0]: https://github.com/iliekturtles/uom/compare/v0.36.0...v0.37.0
