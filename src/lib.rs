@@ -549,7 +549,17 @@ pub trait ConstZero {
 /// kind (with the `si` feature) propagates through multiplication and
 /// division by plain quantities, so `ω_e·dt` is an electrical angle, and
 /// cannot be combined with a mechanical angle kind at all.
-#[doc(hidden)]
+///
+/// A kind defined outside `uom` that takes part in `*` or `/` implements
+/// [`KindClass`](kind_class::KindClass). Class [`Plain`](kind_class::Plain) keeps the previous behavior: products and quotients have the default [`Kind`].
+///
+/// ```rust
+/// pub trait MyKind: uom::Kind {}
+///
+/// impl uom::kind_class::KindClass for dyn MyKind {
+///     type Class = uom::kind_class::Plain;
+/// }
+/// ```
 pub mod kind_class {
     /// Plain kinds: the default `Kind` and kinds without angle semantics.
     #[derive(Clone, Copy, Debug)]
@@ -563,9 +573,11 @@ pub mod kind_class {
 
     /// Class of a kind; implemented for every kind that takes part in `*` or `/`.
     pub trait KindClass {
+        /// [`Plain`], [`Mechanical`] or [`Electrical`].
         type Class;
     }
 
+    #[doc(hidden)]
     /// Kind of the product or quotient of two classes with result dimension `D`
     /// (a tuple of the system's base-dimension exponents). Missing pairs do
     /// not compile.
@@ -608,6 +620,7 @@ pub mod kind_class {
     // No Electrical x Mechanical: mixing electrical and mechanical angles is
     // a pole-pairs bug.
 
+    #[doc(hidden)]
     /// Kind of an electrical-by-plain result with SI dimension exponents
     /// `(L, M, T, I, Th, N, J)`: electrical when only `T` is nonzero.
     #[cfg(feature = "si")]
@@ -677,6 +690,7 @@ pub mod kind_class {
         > as ElectricalIf>::Kind;
     }
 
+    #[doc(hidden)]
     /// Selects the electrical kind for `B1` and the default kind for `B0`.
     #[cfg(feature = "si")]
     pub trait ElectricalIf {

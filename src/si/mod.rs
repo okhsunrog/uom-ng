@@ -216,7 +216,10 @@ pub mod marker {
     /// `ElectricalAngleKind` is a `Kind` for the electrical angle of a rotating electric machine
     /// (the mechanical angle times the number of pole pairs) and its derivatives. Electrical and
     /// mechanical ([`AngleKind`]) quantities do not mix: there is no conversion between the two
-    /// kinds. Conversions to and from the default `Kind` are supported through `From`.
+    /// kinds, and none to or from the default `Kind`, so an electrical quantity becomes a
+    /// mechanical one only through the caller's pole-pairs factor. Multiplying or dividing by a
+    /// plain quantity keeps the electrical kind while the result is angular (`ω_e·dt` is an
+    /// `ElectricalAngle`) and gives the default kind otherwise (`ω_e·λ` is an `ElectricPotential`).
     ///
     #[cfg_attr(feature = "f32", doc = " ```rust")]
     #[cfg_attr(not(feature = "f32"), doc = " ```rust,ignore")]

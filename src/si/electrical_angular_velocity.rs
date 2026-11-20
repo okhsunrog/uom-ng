@@ -45,8 +45,7 @@ mod tests {
         #[test]
         fn check_dimension() {
             let _: ElectricalAngularVelocity<V> =
-                (ElectricalAngle::new::<ea::radian>(V::one()) / Time::new::<t::second>(V::one()))
-                    .into();
+                ElectricalAngle::new::<ea::radian>(V::one()) / Time::new::<t::second>(V::one());
         }
 
         #[test]
